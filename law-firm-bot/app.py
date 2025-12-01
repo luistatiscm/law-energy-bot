@@ -1,75 +1,80 @@
 import streamlit as st
 import time
 
-# --- 1. PAGE CONFIGURATION ---
+# --- 1. CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
     page_title="Law & Energy AI",
     page_icon="⚖️",
     layout="wide"
 )
 
-# --- 2. FORCE THEME & LOGO (CSS INJECTION) ---
-# This forces the Navy Blue theme and handles the logo sizing
+# --- 2. ESTILOS (TEMA NAVY BLUE) ---
 st.markdown("""
 <style>
-    /* Force the main headers to Navy Blue */
-    h1, h2, h3 {
-        color: #002B5C !important;
-    }
+    /* Títulos en Azul Navy */
+    h1, h2, h3 { color: #002B5C !important; }
     
-    /* Style the sidebar to match the firm's professional look */
+    /* Barra lateral estilo profesional */
     section[data-testid="stSidebar"] {
         background-color: #f5f5f5;
         border-right: 2px solid #002B5C;
     }
 
-    /* Change the chat input border to Navy Blue */
-    .stChatInput {
-        border-color: #002B5C !important;
-    }
+    /* Borde del chat input */
+    .stChatInput { border-color: #002B5C !important; }
 
-    /* Add a professional border to the top */
-    header {
-        border-bottom: 2px solid #002B5C;
-    }
+    /* Línea superior decorativa */
+    header { border-bottom: 2px solid #002B5C; }
 </style>
 """, unsafe_allow_html=True)
 
-# Update this line to include the folder name
+# --- 3. BARRA LATERAL (SIDEBAR) BILINGÜE ---
+# Ruta del logo (asegúrese de que la carpeta law-firm-bot existe en GitHub)
 logo_path = "law-firm-bot/logo.png"
 
-# Display Logo in Sidebar
 with st.sidebar:
+    # Intentar cargar el logo
     try:
         st.image(logo_path, use_container_width=True)
     except:
-        st.error("Logo not found. Please upload logo.png to GitHub.")
-
-# Display Logo in Sidebar
-with st.sidebar:
-    try:
-        st.image(logo_url, use_container_width=True)
-    except:
-        # Fallback if the image link breaks
         st.header("Law & Energy")
         st.caption("Consultants, LLC")
     
     st.markdown("---")
     
-    # Language Selector
-    st.header("Language / Idioma")
-    selected_lang = st.radio("Select:", ["English", "Español"])
+    # Selector de Idioma
+    st.header("Idioma / Language")
+    selected_lang = st.radio("Seleccione / Select:", ["Español", "English"])
     
     st.markdown("---")
-    st.caption("📍 San Juan, Puerto Rico")
-    st.caption("📞 (787) 354-5033")
+    
+    # LÓGICA DE TRADUCCIÓN PARA LA BARRA LATERAL
+    if selected_lang == "Español":
+        st.caption("📍 **Ubicación:**")
+        st.markdown("1913 Ave. Las Americas,\nSan Antonio, Ponce, PR")
+        
+        st.caption("📧 **Correo Electrónico:**")
+        st.markdown("vera@lawenergyconsultants.com")
+        
+        st.caption("🕒 **Horario Operacional:**")
+        st.markdown("Lunes a Viernes:\n9:00 am – 6:00 pm\n*(Cita previa / Zoom)*")
+        
+    else: # English Version
+        st.caption("📍 **Location:**")
+        st.markdown("1913 Ave. Las Americas,\nSan Antonio, Ponce, PR")
+        
+        st.caption("📧 **Email Address:**")
+        st.markdown("vera@lawenergyconsultants.com")
+        
+        st.caption("🕒 **Business Hours:**")
+        st.markdown("Monday to Friday:\n9:00 am – 6:00 pm\n*(By appointment / Zoom)*")
 
-# --- 4. KNOWLEDGE BASE & TRANSLATIONS ---
+# --- 4. BASE DE CONOCIMIENTO (DICCIONARIO BILINGÜE) ---
 content = {
     "English": {
         "title": "Law & Energy Consultants",
         "subtitle": "AI Digital Assistant",
-        "welcome": "Ask about: **LUMA Permitting**, **Solar Design**, **Substations**, or **Legal Representation**.",
+        "welcome": "Ask about: **Net Metering**, **Solar Design**, **Location**, or **Legal Representation**.",
         "placeholder": "How can we help with your energy project?",
         "thinking": "Consulting firm database...",
         "responses": {
@@ -77,14 +82,18 @@ content = {
             "renewable": "Our team offers engineering design for **renewable energy systems** (both battery-backed and grid-tied). We can handle the full technical and legal design for residential or commercial projects.",
             "electrical": "We provide design services for **electrical substations**, transmission lines, and distribution lines. Do you need assistance with a specific voltage level?",
             "legal": "As a firm specializing in **Energy Law**, we represent clients in administrative forums and courts. We also handle civil litigation, contracts, and property law.",
-            "contact": "You can reach us at **(787) 354-5033**. Would you like to schedule a consultation regarding a specific project?",
-            "fallback": "I understand you have an inquiry. As an AI assistant, I can help with general information about our Engineering and Legal services. For specific advice, please contact our office directly."
+            "contact": (
+                "You can find us at **1913 Ave. Las Americas, San Antonio, Ponce, PR**. "
+                "Our hours are Mon-Fri 9am-6pm (by appointment/Zoom). "
+                "Please email **vera@lawenergyconsultants.com** to schedule."
+            ),
+            "fallback": "I understand your inquiry. As an AI assistant, I provide general info on Engineering & Law. For specific legal advice, please contact our office directly."
         }
     },
     "Español": {
         "title": "Law & Energy Consultants",
         "subtitle": "Asistente Digital IA",
-        "welcome": "Pregunte sobre: **Permisos LUMA**, **Diseño Solar**, **Subestaciones**, o **Representación Legal**.",
+        "welcome": "Pregunte sobre: **Medición Neta**, **Diseño Solar**, **Ubicación**, o **Representación Legal**.",
         "placeholder": "¿En qué podemos ayudarle con su proyecto energético?",
         "thinking": "Consultando base de datos...",
         "responses": {
@@ -92,42 +101,47 @@ content = {
             "renewable": "Nuestro equipo ofrece diseño de ingeniería para **sistemas de energía renovable** (con baterías o conectados a la red). Manejamos el diseño técnico y legal para proyectos residenciales o comerciales.",
             "electrical": "Proveemos servicios de diseño para **subestaciones eléctricas**, líneas de transmisión y distribución. ¿Necesita asistencia con algún voltaje específico?",
             "legal": "Como firma especializada en **Derecho Energético**, representamos a clientes en foros administrativos y tribunales. También manejamos litigios civiles, contratos y leyes de propiedad.",
-            "contact": "Puede contactarnos al **(787) 354-5033**. ¿Le gustaría coordinar una consulta sobre un proyecto específico?",
-            "fallback": "Entiendo su consulta. Como asistente de IA, puedo ayudarle con información general sobre nuestros servicios de Ingeniería y Leyes. Para asesoría legal específica, por favor contacte nuestra oficina."
+            "contact": (
+                "Estamos ubicados en **1913 Ave. Las Americas, San Antonio, Ponce, PR**. "
+                "Nuestro horario es **Lunes a Viernes de 9:00 am – 6:00 pm** (por cita previa o Zoom). "
+                "Puede escribir a **vera@lawenergyconsultants.com** para coordinar."
+            ),
+            "fallback": "Entiendo su consulta. Como asistente de IA, ofrezco información general sobre nuestros servicios. Para asesoría legal específica, por favor contacte nuestra oficina."
         }
     }
 }
 
-# --- 5. LOGIC ENGINE ---
+# --- 5. MOTOR LÓGICO (KEYWORD MATCHING) ---
 def get_bot_response(user_input, lang_code):
     user_input = user_input.lower()
     resp = content[lang_code]["responses"]
     
-    # Spanish Logic
+    # Lógica Español
     if lang_code == "Español":
-        if any(x in user_input for x in ["luma", "permiso", "medición neta", "ogpe"]): return resp["permits"]
-        elif any(x in user_input for x in ["solar", "renovable", "bateria", "batería"]): return resp["renewable"]
-        elif any(x in user_input for x in ["subestacion", "transmision", "diseño", "voltaje"]): return resp["electrical"]
-        elif any(x in user_input for x in ["ley", "legal", "tribunal", "derecho", "corte"]): return resp["legal"]
-        elif any(x in user_input for x in ["cita", "telefono", "teléfono", "llamar", "contacto"]): return resp["contact"]
+        if any(x in user_input for x in ["luma", "permiso", "medición neta", "ogpe", "endoso"]): return resp["permits"]
+        elif any(x in user_input for x in ["solar", "renovable", "bateria", "batería", "placa"]): return resp["renewable"]
+        elif any(x in user_input for x in ["subestacion", "transmision", "diseño", "voltaje", "ingenieria"]): return resp["electrical"]
+        elif any(x in user_input for x in ["ley", "legal", "tribunal", "derecho", "corte", "caso", "demanda"]): return resp["legal"]
+        elif any(x in user_input for x in ["cita", "correo", "email", "donde", "ubicacion", "ubicación", "horario", "hora", "abierto", "direccion", "ponce"]): return resp["contact"]
         else: return resp["fallback"]
-    # English Logic
+        
+    # Lógica English
     else:
         if any(x in user_input for x in ["luma", "permit", "net metering", "ogpe"]): return resp["permits"]
-        elif any(x in user_input for x in ["solar", "renewable", "battery"]): return resp["renewable"]
-        elif any(x in user_input for x in ["substation", "transmission", "design"]): return resp["electrical"]
-        elif any(x in user_input for x in ["law", "legal", "court", "litigation"]): return resp["legal"]
-        elif any(x in user_input for x in ["appointment", "schedule", "call", "contact"]): return resp["contact"]
+        elif any(x in user_input for x in ["solar", "renewable", "battery", "panel"]): return resp["renewable"]
+        elif any(x in user_input for x in ["substation", "transmission", "design", "engineering"]): return resp["electrical"]
+        elif any(x in user_input for x in ["law", "legal", "court", "litigation", "case"]): return resp["legal"]
+        elif any(x in user_input for x in ["appointment", "email", "where", "location", "address", "hours", "open", "schedule", "ponce"]): return resp["contact"]
         else: return resp["fallback"]
 
-# --- 6. USER INTERFACE ---
+# --- 6. INTERFAZ PRINCIPAL ---
 current_text = content[selected_lang]
 
 st.title(current_text["title"])
 st.subheader(current_text["subtitle"])
 st.markdown(current_text["welcome"])
 
-# Chat History
+# Mostrar historial
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -135,7 +149,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Chat Input
+# Input del usuario
 if prompt := st.chat_input(current_text["placeholder"]):
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -144,9 +158,10 @@ if prompt := st.chat_input(current_text["placeholder"]):
         message_placeholder = st.empty()
         full_response = ""
         with st.spinner(current_text["thinking"]):
-            time.sleep(0.7)
+            time.sleep(0.5)
             assistant_response = get_bot_response(prompt, selected_lang)
 
+        # Efecto de escritura
         for chunk in assistant_response.split():
             full_response += chunk + " "
             time.sleep(0.05)
@@ -154,6 +169,7 @@ if prompt := st.chat_input(current_text["placeholder"]):
         message_placeholder.markdown(full_response)
         
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 
 
 
