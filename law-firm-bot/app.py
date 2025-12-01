@@ -35,9 +35,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. LOGO SETUP ---
-# We use the uploaded file instead of the URL
-logo_path = "logo.png"
+# Update this line to include the folder name
+logo_path = "law-firm-bot/logo.png"
 
 # Display Logo in Sidebar
 with st.sidebar:
@@ -155,6 +154,7 @@ if prompt := st.chat_input(current_text["placeholder"]):
         message_placeholder.markdown(full_response)
         
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 
 
 
