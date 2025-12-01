@@ -5,11 +5,12 @@ import time
 # Configure the page and adding the Logo
 st.set_page_config(page_title="Law & Energy AI", page_icon="⚖️")
 
-# TRY TO LOAD LOGO (If you uploaded 'logo.png' to GitHub)
-try:
-    st.logo("logo.png")
-except:
-    pass # If logo isn't uploaded yet, it just skips this step
+# --- LOGO SETUP ---
+# We use the direct link to their website logo so you don't have to upload a file
+logo_url = "https://lawenergyconsultants.com/wp-content/uploads/2019/12/logo-law-energy-consultants-header-retina.png"
+
+# This puts the logo at the top of the Sidebar (big and visible)
+st.sidebar.image(logo_url, use_container_width=True)
 
 content = {
     "English": {
@@ -184,5 +185,6 @@ if prompt := st.chat_input(current_text["placeholder"]):
         message_placeholder.markdown(full_response)
         
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 
 
