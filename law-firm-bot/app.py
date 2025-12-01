@@ -36,8 +36,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- 3. LOGO SETUP ---
-# We use the direct URL to the image on their website.
-logo_url = "https://lawenergyconsultants.com/wp-content/uploads/2019/12/logo-law-energy-consultants-header-retina.png"
+# We use the uploaded file instead of the URL
+logo_path = "logo.png"
+
+# Display Logo in Sidebar
+with st.sidebar:
+    try:
+        st.image(logo_path, use_container_width=True)
+    except:
+        st.error("Logo not found. Please upload logo.png to GitHub.")
 
 # Display Logo in Sidebar
 with st.sidebar:
@@ -148,6 +155,7 @@ if prompt := st.chat_input(current_text["placeholder"]):
         message_placeholder.markdown(full_response)
         
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 
 
 
