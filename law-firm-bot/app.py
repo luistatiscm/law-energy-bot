@@ -1,12 +1,20 @@
-
 import streamlit as st
 import time
 
 # --- 1. CONFIGURATION & TRANSLATIONS ---
-# We structure the data so it's easy to switch languages
+# Configure the page and adding the Logo
+st.set_page_config(page_title="Law & Energy AI", page_icon="⚖️")
+
+# TRY TO LOAD LOGO (If you uploaded 'logo.png' to GitHub)
+try:
+    st.logo("logo.png")
+except:
+    pass # If logo isn't uploaded yet, it just skips this step
+
 content = {
     "English": {
-        "title": "⚖️ Law & Energy Assistant",
+        "title": "Law & Energy Consultants",
+        "subtitle": "AI Digital Assistant",
         "welcome": "Ask about: **LUMA Permitting**, **Solar Design**, **Substations**, or **Legal Representation**.",
         "placeholder": "How can we help with your energy project?",
         "thinking": "Consulting firm database...",
@@ -42,7 +50,8 @@ content = {
         }
     },
     "Español": {
-        "title": "⚖️ Asistente Law & Energy",
+        "title": "Law & Energy Consultants",
+        "subtitle": "Asistente Digital IA",
         "welcome": "Pregunte sobre: **Permisos LUMA**, **Diseño Solar**, **Subestaciones**, o **Representación Legal**.",
         "placeholder": "¿En qué podemos ayudarle con su proyecto energético?",
         "thinking": "Consultando base de datos...",
@@ -116,10 +125,21 @@ def get_bot_response(user_input, lang_code):
             return resp["fallback"]
 
 # --- 3. UI SETUP ---
-st.set_page_config(page_title="Law & Energy AI", page_icon="⚖️")
 
-# Add the company logo to the top left
-st.logo("logo.png")
+# Custom CSS to force the firm's branding on the headers
+st.markdown("""
+<style>
+    /* Change the title color to Navy Blue */
+    h1 {
+        color: #002B5C;
+        font-family: 'Helvetica', sans-serif;
+    }
+    /* Style the chat input box */
+    .stChatInput {
+        border-color: #002B5C;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Sidebar for Language Selection
 with st.sidebar:
@@ -127,13 +147,14 @@ with st.sidebar:
     selected_lang = st.radio("Select:", ["English", "Español"])
     
     st.markdown("---")
-    st.markdown("**Law & Energy Consultants, LLC**")
+    st.markdown(f"**{content['English']['title']}**")
     st.caption("San Juan, Puerto Rico")
 
 # Load text based on selection
 current_text = content[selected_lang]
 
 st.title(current_text["title"])
+st.subheader(current_text["subtitle"])
 st.markdown(current_text["welcome"])
 
 # Chat History
@@ -154,10 +175,8 @@ if prompt := st.chat_input(current_text["placeholder"]):
         full_response = ""
         with st.spinner(current_text["thinking"]):
             time.sleep(0.7)
-            # Pass the selected language to the logic function
             assistant_response = get_bot_response(prompt, selected_lang)
 
-        # Typing effect
         for chunk in assistant_response.split():
             full_response += chunk + " "
             time.sleep(0.05)
@@ -165,4 +184,5 @@ if prompt := st.chat_input(current_text["placeholder"]):
         message_placeholder.markdown(full_response)
         
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 
