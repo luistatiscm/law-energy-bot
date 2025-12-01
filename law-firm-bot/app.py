@@ -118,6 +118,9 @@ def get_bot_response(user_input, lang_code):
 # --- 3. UI SETUP ---
 st.set_page_config(page_title="Law & Energy AI", page_icon="⚖️")
 
+# Add the company logo to the top left
+st.logo("logo.png")
+
 # Sidebar for Language Selection
 with st.sidebar:
     st.header("Language / Idioma")
@@ -162,3 +165,4 @@ if prompt := st.chat_input(current_text["placeholder"]):
         message_placeholder.markdown(full_response)
         
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
